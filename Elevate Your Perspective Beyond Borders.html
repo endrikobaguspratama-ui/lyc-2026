@@ -1,0 +1,343 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Elevate Your Perspective Beyond Borders</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centered column, one question per screen, results as a score chart + group card + challenge card. */
+:root {
+  --bg: #F3F5F9;
+  --surface: #FFFFFF;
+  --fg: #14213D;
+  --muted: #5B6578;
+  --line: #D9DFEA;
+  --accent: #1F3864;
+  --accent-fg: #FFFFFF;
+  --focus: #2F6DB5;
+  --d: #C0392B;
+  --i: #D4930D;
+  --s: #2E8B57;
+  --c: #2F6DB5;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1626; --surface: #172036; --fg: #E8ECF5; --muted: #9AA6BD; --line: #2A3652;
+    --accent: #8FB0F0; --accent-fg: #0F1626; --focus: #8FB0F0;
+    --d: #F0786A; --i: #F2BE4A; --s: #5FC48B; --c: #7FB0EE;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1626; --surface: #172036; --fg: #E8ECF5; --muted: #9AA6BD; --line: #2A3652;
+  --accent: #8FB0F0; --accent-fg: #0F1626; --focus: #8FB0F0;
+  --d: #F0786A; --i: #F2BE4A; --s: #5FC48B; --c: #7FB0EE;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 680px; margin: 0 auto; display: grid; gap: 16px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-fg); padding: 12px 20px; border-radius: 6px; font-weight: 600; min-height: 46px; }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+
+/* intro */
+#intro h1 { font-size: clamp(28px, 6vw, 40px); }
+.lead { color: var(--muted); max-width: 60ch; }
+label.field { display: grid; gap: 6px; font-weight: 500; font-size: 14px; }
+input[type=text] { font: inherit; padding: 11px 12px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 6px; width: 100%; min-height: 46px; }
+.rules { display: grid; gap: 6px; padding: 0; margin: 0; list-style: none; font-size: 15px; }
+.rules li { padding-left: 18px; position: relative; }
+.rules li::before { content: ""; position: absolute; left: 0; top: .65em; width: 8px; height: 2px; background: var(--accent); }
+
+/* quiz */
+.progress { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
+.progress span { height: 6px; border-radius: 2px; background: var(--line); }
+.progress span.done { background: var(--accent); }
+.progress span.now { background: var(--fg); }
+.q-meta { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.q-label { color: var(--muted); font-size: 14px; }
+#qTitle { font-size: clamp(22px, 5vw, 28px); }
+.opts { display: grid; gap: 10px; }
+.opt { border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: grid; gap: 10px; background: var(--bg); }
+.opt.is-most { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.opt.is-least { border-style: dashed; border-color: var(--muted); }
+.opt-text { display: flex; gap: 10px; align-items: baseline; }
+.letter { font-family: var(--font-display); font-weight: 700; color: var(--muted); min-width: 1.2em; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seg button { padding: 9px 10px; min-height: 44px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; font-weight: 500; }
+.seg button[aria-pressed="true"][data-role="most"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
+.seg button[aria-pressed="true"][data-role="least"] { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 600; }
+.hint { font-size: 13px; color: var(--muted); }
+
+/* results */
+#result h2 { font-size: clamp(26px, 6vw, 36px); }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+.note { border-left: 3px solid var(--accent); padding: 8px 12px; background: var(--bg); font-size: 15px; }
+.bars { display: grid; gap: 14px; }
+.bar-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 15px; }
+.bar-head b { font-weight: 600; }
+.bar-head .val { font-variant-numeric: tabular-nums; }
+.track { position: relative; height: 16px; background: var(--bg); border: 1px solid var(--line); border-radius: 3px; margin-top: 6px; }
+.track::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; background: var(--muted); }
+.fill { position: absolute; top: 0; bottom: 0; }
+.bar-sub { font-size: 13px; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.axis { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; font-size: 15px; }
+dl.facts dt { color: var(--muted); }
+dl.facts dd { margin: 0; }
+.challenge h3 { font-size: 22px; }
+.rule { font-weight: 500; }
+.summary { font-size: 14px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; user-select: all; overflow-wrap: anywhere; }
+.status { font-size: 13px; color: var(--muted); min-height: 1.4em; }
+@media (max-width: 460px) { dl.facts { grid-template-columns: 1fr; gap: 0; } dl.facts dd { margin-bottom: 8px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<main id="app">
+  <!-- Intro -->
+  <section id="intro" class="card" aria-labelledby="introTitle">
+    <p class="eyebrow">DISC leadership self-assessment</p>
+    <h1 id="introTitle">Elevate Your Perspective Beyond Borders</h1>
+    <p class="lead">Find your leadership style across four layers: self, team, organization and succession. Your result appears as soon as you answer the last question.</p>
+    <ul class="rules">
+      <li>12 questions, about 10 minutes.</li>
+      <li>In each one, mark the statement that is most like you and the one that is least like you when you lead.</li>
+      <li>Use each answer once per question and go with your first instinct.</li>
+    </ul>
+    <label class="field" for="nameInput">Your name (optional)
+      <input id="nameInput" type="text" autocomplete="name" maxlength="60" placeholder="e.g. Rina Putri">
+    </label>
+    <div><button id="startBtn" class="btn" type="button">Start the assessment</button></div>
+  </section>
+
+  <!-- Quiz -->
+  <section id="quiz" hidden aria-live="polite">
+    <div class="card">
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <p class="q-meta" id="qMeta"></p>
+      <div>
+        <p class="q-label">When leading, in this situation I...</p>
+        <h2 id="qTitle"></h2>
+      </div>
+      <div class="opts" id="opts"></div>
+      <p class="hint" id="hint">Choose one Most and one Least to continue.</p>
+      <div class="row">
+        <button id="backBtn" class="btn ghost" type="button">Back</button>
+        <button id="nextBtn" class="btn" type="button" disabled>Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section id="result" hidden aria-live="polite">
+    <div class="card" id="headCard"></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var ITEMS = [
+    ["Run a team meeting", "Make sure everyone gets a chance to speak", "Take charge and push for a decision", "Prepare data and an agenda beforehand", "Energize the room and keep spirits high"],
+    ["Face a project under pressure", "Check the details and fix the process", "Rally people with optimism", "Set a hard deadline and drive results", "Stay calm and support the team"],
+    ["Hand over a role to a successor", "Tell stories and inspire them to take over", "Stay close and guide them step by step", "Set clear targets and let them run", "Write detailed documentation and checklists"],
+    ["Facilitate a session", "Keep the group on time and on outcome", "Structure each activity carefully", "Make it fun and interactive", "Create a safe space for quiet voices"],
+    ["Face conflict in my team", "Look at the facts to find the root cause", "Seek harmony and keep the peace", "Talk it through and lighten the mood", "Address it head-on right away"],
+    ["Am described by teammates as", "Charismatic and expressive", "Bold and competitive", "Loyal and dependable", "Precise and careful"],
+    ["Start a new role", "Build trust and learn the team's rhythm", "Study the goals, rules and history", "Set my targets and make quick changes", "Meet everyone and share my vision"],
+    ["Make a decision", "Weigh all options and risks carefully", "Decide fast and adjust later", "Go with intuition and what excites people", "Consider how it affects everyone involved"],
+    ["Give feedback", "Am direct and to the point", "Am gentle and patient", "Am encouraging and positive", "Am specific and evidence-based"],
+    ["Work across cultures and borders", "Connect quickly and make friends", "Research local norms and prepare thoroughly", "Listen first and adapt gradually", "Lead from the front and set direction"],
+    ["Feel most energized by", "Supporting and developing people steadily", "Winning and reaching big targets", "Building quality and systems that last", "Inspiring others and being recognized"],
+    ["Think about my legacy as", "A solid system that outlasts me", "A community that remembers the energy", "A record of bold results", "A team that feels cared for and stable"]
+  ];
+  var KEY = ["SDCI","CIDS","ISDC","DCIS","CSID","IDSC","SCDI","CDIS","DSIC","ICSD","SDCI","CIDS"];
+  var ORDER = ["D", "I", "S", "C"];
+  var STYLES = {
+    D: { name: "Dominance", v: "--d", drive: "Results and control", strengths: "Decisive, bold, takes ownership", blind: "Impatient, overrides others", stress: "Becomes controlling",
+         ctitle: "The Silent Handover", crule: "For the first 10 minutes, only ask questions: no statements or orders. Give the successor ownership of at least 3 decisions." },
+    I: { name: "Influence", v: "--i", drive: "Recognition and connection", strengths: "Inspires, networks, brings energy", blind: "Loses detail, overpromises", stress: "Becomes scattered or emotional",
+         ctitle: "The Evidence Page", crule: "Every claim needs a number, a date and an owner. Use at most 3 sheets with 20 words each." },
+    S: { name: "Steadiness", v: "--s", drive: "Stability and harmony", strengths: "Patient, loyal, builds trust", blind: "Avoids conflict, slow to change", stress: "Withdraws or complies silently",
+         ctitle: "The Hard Call", crule: "Choose between two imperfect options in 10 minutes by vote, and name one thing the team will stop doing." },
+    C: { name: "Conscientiousness", v: "--c", drive: "Accuracy and quality", strengths: "Analytical, systematic, high standards", blind: "Over-analyzes, rigid, distant", stress: "Becomes critical or perfectionist",
+         ctitle: "The 60% Pitch", crule: "Work with only 60% of the information you ask for and give an energetic, story-based pitch with no handouts." }
+  };
+  var CASE = "Your outgoing leader leaves in 14 days. Design a one-page handover for a successor whose DISC style differs from yours. Cover Self, Team, Organization and Succession, and include one measurable day-14 indicator. 30 minutes to prepare, 3 minutes to present.";
+  var LETTERS = ["A", "B", "C", "D"];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var step = 0, answers = [], who = "";
+
+  function reset() {
+    answers = ITEMS.map(function () { return { most: null, least: null }; });
+    step = 0;
+  }
+  function show(which) {
+    ["intro", "quiz", "result"].forEach(function (k) { $(k).hidden = (k !== which); });
+    window.scrollTo(0, 0);
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* ---------- quiz ---------- */
+  function renderQ() {
+    var it = ITEMS[step];
+    $("qTitle").textContent = it[0];
+    $("qMeta").textContent = "Question " + (step + 1) + " of " + ITEMS.length;
+    var p = "";
+    for (var n = 0; n < ITEMS.length; n++) p += '<span class="' + (n < step ? "done" : n === step ? "now" : "") + '"></span>';
+    $("progress").innerHTML = p;
+    var html = "";
+    for (var i = 0; i < 4; i++) {
+      html += '<div class="opt" data-i="' + i + '">' +
+        '<p class="opt-text"><span class="letter">' + LETTERS[i] + '</span><span>' + esc(it[i + 1]) + '</span></p>' +
+        '<div class="seg" role="group" aria-label="Option ' + LETTERS[i] + '">' +
+        '<button type="button" data-role="most" aria-pressed="false">Most like me</button>' +
+        '<button type="button" data-role="least" aria-pressed="false">Least like me</button>' +
+        '</div></div>';
+    }
+    $("opts").innerHTML = html;
+    $("backBtn").disabled = step === 0;
+    $("nextBtn").textContent = step === ITEMS.length - 1 ? "See my result" : "Next";
+    paint();
+  }
+  function paint() {
+    var a = answers[step];
+    var opts = $("opts").children;
+    for (var i = 0; i < opts.length; i++) {
+      var o = opts[i];
+      o.classList.toggle("is-most", a.most === i);
+      o.classList.toggle("is-least", a.least === i);
+      o.querySelector('[data-role="most"]').setAttribute("aria-pressed", a.most === i ? "true" : "false");
+      o.querySelector('[data-role="least"]').setAttribute("aria-pressed", a.least === i ? "true" : "false");
+    }
+    var ok = a.most !== null && a.least !== null;
+    $("nextBtn").disabled = !ok;
+    $("hint").textContent = ok ? "Good. Continue when you are ready." :
+      (a.most === null && a.least === null ? "Choose one Most and one Least to continue." :
+       a.most === null ? "Now choose the statement that is Most like you." : "Now choose the statement that is Least like you.");
+  }
+  $("opts").addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-role]");
+    if (!btn) return;
+    var i = +btn.closest(".opt").getAttribute("data-i");
+    var role = btn.getAttribute("data-role");
+    var other = role === "most" ? "least" : "most";
+    var a = answers[step];
+    if (a[role] === i) { a[role] = null; }
+    else { a[role] = i; if (a[other] === i) a[other] = null; }
+    paint();
+  });
+  $("startBtn").addEventListener("click", function () {
+    who = $("nameInput").value.trim();
+    reset(); show("quiz"); renderQ();
+  });
+  $("backBtn").addEventListener("click", function () { if (step > 0) { step--; renderQ(); } });
+  $("nextBtn").addEventListener("click", function () {
+    if (step < ITEMS.length - 1) { step++; renderQ(); window.scrollTo(0, 0); }
+    else { showResult(); }
+  });
+
+  /* ---------- scoring ---------- */
+  function compute() {
+    var M = { D: 0, I: 0, S: 0, C: 0 }, L = { D: 0, I: 0, S: 0, C: 0 };
+    answers.forEach(function (a, n) { M[KEY[n].charAt(a.most)]++; L[KEY[n].charAt(a.least)]++; });
+    var out = {};
+    ORDER.forEach(function (k) {
+      var s = M[k] - L[k];
+      out[k] = { m: M[k], l: L[k], score: s, tie: s * 100 + M[k] };
+    });
+    return out;
+  }
+  function reading(s) { return s >= 4 ? "Strong" : s >= 1 ? "Moderate" : s >= -3 ? "Flexible" : "Stretch zone"; }
+  function sign(n) { return n > 0 ? "+" + n : String(n); }
+
+  /* ---------- results ---------- */
+  function showResult() {
+    var r = compute();
+    var maxTie = Math.max.apply(null, ORDER.map(function (k) { return r[k].tie; }));
+    var top = ORDER.filter(function (k) { return r[k].tie === maxTie; });
+    var ranked = ORDER.slice().sort(function (x, y) { return r[y].tie - r[x].tie; });
+    var topScore = r[ranked[0]].score;
+    var title = top.length > 1
+      ? "Tied: " + top.map(function (k) { return k + " " + STYLES[k].name; }).join(" and ")
+      : top[0] + " – " + STYLES[top[0]].name;
+
+    var h = '<p class="eyebrow">' + (who ? esc(who) + " · " : "") + 'Your DISC result</p>';
+    h += '<h2 id="resTitle"><span class="swatch" style="background:var(' + STYLES[top[0]].v + ')"></span>' + (top.length > 1 ? "" : "Your group: ") + esc(title) + '</h2>';
+    if (top.length > 1) {
+      h += '<p class="note">Your top scores are level. Pick the group whose challenge you want to take on; both are below.</p>';
+    } else if (topScore <= 3) {
+      h += '<p class="note">Your lead is small. You may join either your top group (' + ranked[0] + ') or your next strongest (' + ranked[1] + ' ' + sign(r[ranked[1]].score) + ').</p>';
+    }
+    h += '<div class="bars" role="list" aria-label="Scores per style">';
+    ORDER.forEach(function (k) {
+      var s = r[k].score, w = Math.abs(s) / 12 * 50;
+      var pos = s >= 0 ? "left:50%;" : "right:50%;";
+      h += '<div role="listitem"><div class="bar-head"><b>' + k + ' · ' + STYLES[k].name + '</b><span class="val">' + sign(s) + ' · ' + reading(s) + '</span></div>' +
+        '<div class="track"><div class="fill" style="' + pos + 'width:' + w + '%;background:var(' + STYLES[k].v + ')"></div></div>' +
+        '<div class="bar-sub">Most ' + r[k].m + ' · Least ' + r[k].l + '</div></div>';
+    });
+    h += '</div><div class="axis" aria-hidden="true"><span>-12</span><span>0</span><span>+12</span></div>';
+    h += '<p class="hint">Score = times marked Most minus times marked Least. Strong: +4 or more. Moderate: +1 to +3. Flexible: 0 to -3. Stretch zone: -4 or less. Your result is a starting point for discussion, not a label.</p>';
+    $("headCard").innerHTML = h;
+
+    // remove any previous extra cards
+    var sec = $("result");
+    Array.prototype.slice.call(sec.querySelectorAll(".extra")).forEach(function (n) { n.remove(); });
+
+    top.forEach(function (k) {
+      var S = STYLES[k];
+      var c = document.createElement("div");
+      c.className = "card extra";
+      c.innerHTML = '<h3><span class="swatch" style="background:var(' + S.v + ')"></span>Group ' + k + ' · ' + S.name + '</h3>' +
+        '<dl class="facts"><dt>Core drive</dt><dd>' + S.drive + '</dd><dt>Strengths</dt><dd>' + S.strengths + '</dd><dt>Blind spots</dt><dd>' + S.blind + '</dd><dt>Under stress</dt><dd>' + S.stress + '</dd></dl>';
+      sec.appendChild(c);
+      var ch = document.createElement("div");
+      ch.className = "card extra challenge";
+      ch.innerHTML = '<p class="eyebrow">Your group challenge</p><h3>' + S.ctitle + '</h3><p class="rule">Stretch rule: ' + S.crule + '</p>' +
+        '<p class="hint">Shared case: ' + CASE + '</p>';
+      sec.appendChild(ch);
+    });
+
+    var summary = (who ? who + " – " : "") + "DISC group: " + top.map(function (k) { return k + " (" + STYLES[k].name + ")"; }).join(" / ") +
+      ". Scores: " + ORDER.map(function (k) { return k + " " + sign(r[k].score); }).join(", ") + ".";
+    var act = document.createElement("div");
+    act.className = "card extra";
+    act.innerHTML = '<p class="summary" id="summary"></p><div class="row"><button class="btn" type="button" id="copyBtn">Copy my result</button><button class="btn ghost" type="button" id="againBtn">Start over</button></div><p class="status" id="status" role="status"></p>';
+    sec.appendChild(act);
+    $("summary").textContent = summary;
+    $("copyBtn").addEventListener("click", function () {
+      function fallback() {
+        var rng = document.createRange(); rng.selectNodeContents($("summary"));
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(rng);
+        $("status").textContent = "Copy was blocked. The text is selected; copy it manually.";
+      }
+      try {
+        navigator.clipboard.writeText(summary).then(function () { $("status").textContent = "Copied."; }, fallback);
+      } catch (e) { fallback(); }
+    });
+    $("againBtn").addEventListener("click", function () { reset(); show("intro"); });
+    show("result");
+  }
+
+  reset();
+})();
+</script>
+
+</body></html>
